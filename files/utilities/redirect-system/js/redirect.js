@@ -24,6 +24,18 @@ function dec(s){
   return u;
 }
 
+function sanitizeRedirectUrl(u){
+  try {
+    const url = new URL(u);
+    if (url.protocol === "http:" || url.protocol === "https:") {
+      return url.toString();
+    }
+  } catch (e) {
+    // Invalid URL
+  }
+  return null;
+}
+
 function gen(u){
   const short = `${location.origin}${location.pathname}?c=${enc(u)}`;
   console.log("Short:", short);
@@ -36,8 +48,13 @@ function gen(u){
 
   if (c) {
     const u = dec(c);
-    console.log("→ redirect:", u);
-    location.replace(u);
+    const safeUrl = sanitizeRedirectUrl(u);
+    if (safeUrl) {
+      console.log("→ redirect:", safeUrl);
+      location.replace(safeUrl);
+    } else {
+      console.warn("Invalid redirect URL, no redirect performed.");
+    }
     return;
   }
 
