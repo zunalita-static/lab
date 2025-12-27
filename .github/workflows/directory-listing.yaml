@@ -16,16 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Prepare site
-        run: |
-          mkdir -p public
-          cp -r * public/
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
-          path: public/
+          path: ./
 
       - name: Deploy to Pages
         uses: actions/deploy-pages@v4
